@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Look around you: Photos from nearby</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <h1>Look around you: photos from nearby</h1>
+    <main>
+        <article id="screen1">
+            <h2>You are in <span class="place loader"></span></h2>
+            <div class="actions">
+                <button id="fetchPhotos" type="button">Find recent photos from <span class="place loader"></span></button>
+            </div>
+        </article>
+        <article id="screen2">
+            <h2>You are in <span class="place loader"></span></h2>
+            <div class="loader" id="thinker"></div>
+            <p>Searching for recent photos from <span class="place loader"></span></p>
+            <div class="actions">
+                <button id="cancelSearch" type="button">Cancel photo search</button>
+            </div>
+
+        </article>
+        <article id="screen3">
+            <h2>Recent photos from <span class="place loader"></span></h2>
+            <!--  TODO: report date -->
+            <p>Month Year</p>
+            <div id="gallery">
+                <ul class="cards">
+                </ul>
+            </div>
+            <div class="actions">
+                <button id="seeMorePhotos" type="button">See more photos</button><button id="startOver"
+                    type="button">Start over</button>
+            </div></article>
+    </main>
+    <footer>&copy; 2023 Melanie Archer (@archemel)</footer>
+    <script src="client.js"></script>
+    <!-- <script src="photos.js"></script> -->
+</body>
+</html>
