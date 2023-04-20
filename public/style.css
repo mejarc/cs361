@@ -87,8 +87,7 @@ main {
   padding: var(--basic-padding);
 }
 /*
-section {
-}
+
 article {
 }
 
@@ -161,6 +160,22 @@ input::placeholder {
   vertical-align: middle;
   border-radius: calc(var(--basic-margin)/4);
 }
+/* Fade in/out the different screens */
+#screen1, #screen2, #screen3 {
+  transition: opacity 0.4s ease-in-out, visibility 0.2s ease-in-out;
+}
+.inactive {
+  visibility: collapse;
+  opacity: 0;
+  pointer-events: none;
+  height: 0
+}
+.active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: all;
+}
+
 /* CSS loading spinner
 Adapted from:
 URL: https://www.freecodecamp.org/news/how-to-create-a-css-only-loader/
