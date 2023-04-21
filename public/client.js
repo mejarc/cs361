@@ -36,7 +36,7 @@ const getApi = (geoApi) => {
       if (data) {
         addPlace(data);
       } else {
-        showError("Could not use the data.");
+        showError("Could not use the data.", '#gallery');
       }
     })
     .catch((error) => {
@@ -57,11 +57,8 @@ const addPlace = (data) => {
   }
 };
 
-const showError = (error) => {
-  const places = document.querySelectorAll(".place");
-  places.forEach((place) => {
-    place.innerText = error;
-  });
+const showError = (error, elm) => {
+  document.querySelector(elm).innerText = error;
 };
 
 /* Adapted from Unsplash API documentation
@@ -71,25 +68,42 @@ Date: April 2023
 Adapted by Melanie Archer
 */
 
-async function getPhotos(place) {
-  const UNSPLASH = `https://api.unsplash.com/photos?client_id=${key}&order_by=latest`;
+async function getPhotos(place, page) {
+  const UNSPLASH = `https://api.unsplash.com/photos?client_id=${key}&order_by=latest&per_page=6&page=${page}`;
+
+  // Allow fetch to be canceled
+  const controller = new AbortController();
+  const signal = controller.signal;
+  signal.addEventListener("abort", () => {
+    console.log("Fetch canceled.");
+  });
+
+  // When the user cancels photo search, empty the gallery and return to first screen
+  const cancelSearch = document.getElementById("cancelSearch");
+  cancelSearch.addEventListener("click", (e) => {
+    e.preventDefault();
+    controller.abort();
+    emptyPhotoGallery();
+    showNextScreen("#screen2", "#screen1");
+  });
 
   // TODO you must take the photo id of each photo and then get its location in a separate call
-  fetch(UNSPLASH)
+  fetch(UNSPLASH, {
+    signal: signal,
+  })
     .then((resp) => resp.json())
     .then((json) => {
       if (json.error) {
-        // TODO: add text content for user
-        showError(json.error);
+        showError(json.error, '#thinker');
       } else {
-        console.log(`using ${place}`);
         usePhotos(json);
       }
     });
 }
 
 // Remove any images already placed
-const emptyPhotoGallery = (gallery) => {
+const emptyPhotoGallery = () => {
+  const gallery = document.querySelector("#gallery .cards");
   while (gallery.lastChild) {
     gallery.removeChild(gallery.lastChild);
   }
@@ -97,7 +111,7 @@ const emptyPhotoGallery = (gallery) => {
 
 const usePhotos = (data) => {
   const cards = document.querySelector("#gallery .cards");
-  emptyPhotoGallery(cards);
+  emptyPhotoGallery();
 
   for (let i = 0; i < data.length; i++) {
     const li = document.createElement("li");
@@ -108,23 +122,29 @@ const usePhotos = (data) => {
     a.setAttribute("href", data[i].links.html);
     img.setAttribute("src", data[i].urls.thumb);
     img.setAttribute("alt", data[i].alt_description);
+    p.innerText = data[i].user.name;
+
     a.appendChild(img);
     li.appendChild(a);
+    li.append(p);
     cards.appendChild(li);
+
     // Show gallery screen
-    showNextScreen("#screen2");
+    showNextScreen("#screen2", "#screen3");
   }
 };
 
-const showNextScreen = (elm) => {
+const showNextScreen = (elm, nextScreen) => {
   const trigger = document.querySelector(elm);
+  const next = document.querySelector(nextScreen);
   trigger.classList.toggle("active");
 
-  trigger.nextElementSibling.classList.toggle("inactive");
-  trigger.nextElementSibling.className = "active";
+  next.classList.toggle("inactive");
+  next.className = "active";
 
   trigger.className = "inactive";
 };
+
 
 // Event listeners
 document.addEventListener("DOMContentLoaded", (evt) => {
@@ -132,8 +152,24 @@ document.addEventListener("DOMContentLoaded", (evt) => {
   addPlace(locale);
 
   const fetchPhotos = document.getElementById("fetchPhotos");
-  fetchPhotos.addEventListener("click", () => {
-    showNextScreen("#screen1");
-    getPhotos(locale.locality);
+  fetchPhotos.addEventListener("click", (e) => {
+    e.preventDefault();
+    showNextScreen("#screen1", "#screen2");
+    getPhotos(locale.locality, 1);
   });
+  const fetchMorePhotos = document.getElementById("fetchMorePhotos");
+  fetchMorePhotos.addEventListener("click", (e) => {
+    e.preventDefault();
+    showNextScreen("#screen2", "#screen2");
+    getPhotos(locale.locality, 2);
+  });
+
+  const startOver = document.getElementById('startOver');
+  startOver.addEventListener('click', (e) => {
+    e.preventDefault();
+    emptyPhotoGallery();
+    showNextScreen("#screen3", '#screen1');
+  });
+
+
 });
