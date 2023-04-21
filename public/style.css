@@ -118,12 +118,12 @@ button {
 
   width: 45vw;
 }
-button:focus {
-  /* outline: 1px solid var(--highlight-text-color); */
+/* button:focus {
+  /* outline: 1px solid var(--highlight-text-color);
 }
 button:hover {
-  /* color: var(--highlight-text-color); */
-}
+  /* color: var(--highlight-text-color); 
+} */
 /* input {
   color: var(--text-color);
   font-family: "Kanit", Arial, sans-serif;
@@ -188,7 +188,7 @@ Adapted by Melanie Archer
   --n: 15;    /* number of dashes*/
   --g: 7deg; /* gap between dashes*/
   --c: #555;   /* the color */
-  width: 80px; /* size */
+  width: 40px; /* size */
   display: inline-block;
   aspect-ratio: 1;
   border-radius: 50%;

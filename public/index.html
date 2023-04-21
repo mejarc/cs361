@@ -10,12 +10,11 @@
 <body>
     <h1>Look around you: photos from nearby</h1>
     <main>
-        <article> <h2>You are in <span class="place loader"></span></h2>
+        <article>
+            <h2>You are in <span class="place loader"></span></h2>
             <section id="screen1" class="active">
-               
                 <div class="actions">
-                    <button id="fetchPhotos" type="button">Find recent photos from <span
-                            class="place loader"></span></button>
+                    <button id="fetchPhotos" type="button">Find recent photos from <span class="place loader"></span></button>
                 </div>
             </section>
 
@@ -29,14 +28,14 @@
             </section>
             <section id="screen3" class="inactive">
                 <h3>Recent photos from <span class="place loader"></span></h3>
-                <!--  TODO: report date -->
-                <p>Month Year</p>
+                <!--  TODO: report date
+                <p>Month Year</p> -->
                 <div id="gallery">
                     <ul class="cards">
                     </ul>
                 </div>
                 <div class="actions">
-                    <button id="seeMorePhotos" type="button">See more photos</button><button id="startOver"
+                    <button id="fetchMorePhotos" type="button">See more photos</button><button id="startOver"
                         type="button">Start over</button>
                 </div>
             </section>
