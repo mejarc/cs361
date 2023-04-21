@@ -3,98 +3,30 @@
 :root {
   /* Variables */
   --text-color: #555; 
-  
-
-  
-  /* 
-  --reverse-text-color: var(--background-color);
-  --highlight-text-color: #b2cce5;
-  --link-color: #ececec;
-  --visited-color: #d4d4d4;
-  --background-color: #34495e;
-  --reverse-background-color: var(--text-color);
-  --section-background-color: #3b3b3b; */
+  --highlight-text-color: #738697;
   --basic-margin: 1em;
   --basic-padding: 0.5em;
   --generous-padding: 0.65em;
-  /* --border-color: #939393;
-  --alt-border-color: #7bacdd; */
   font-size: 120%;
 }
 
 body {
-  /* color: var(--text-color); */
-  /* background-color: var(--background-color); */
   font-family: "Open Sans", Arial, sans-serif;
   font-size: 1rem;
   margin: var(--basic-margin);
   padding: var(--basic-padding);
 }
 
-/* a {
-  color: var(--link-color);
-}
-a:link {
-  color: var(--link-color);
-}
-a:hover {
-  color: var(--highlight-text-color);
-}
-a:active {
-  color: var(--highlight-text-color);
-}
-a:visited {
-  color: var(--visited-color);
-} */
-
-/* nav {
-  background-color: var(--section-background-color);
-  border: var(--border-color) 1px solid;
-  font-size: 1.25rem;
-  font-weight: bold;
-}
-nav a {
-  color: var(--text-color);
-  display: inline-block;
-  margin: var(--basic-margin);
-  padding: var(--basic-padding);
-  text-decoration: var(--highlight-text-color) underline dotted;
-}
-nav a:hover {
-  background-color: var(--background-color);
-  color: var(--highlight-text-color);
-}
-nav ul {
-  display: flex;
-  list-style: none;
-}
-nav li {
-  flex: 1;
-} */
 header {
-  /* background-color: var(--section-background-color); */
-  /* color: var(--text-color); */
-  /* border: 2px solid var(--border-color); */
   font-size: 1rem;
   font-weight: bold;
   margin: var(--basic-margin);
   padding: var(--basic-padding);
 }
 main {
-  /* background-color: var(--background-color); */
-  /* color: var(--text-color); */
-  /* border: 0 1px var(--highlight-text-color); */
   padding: var(--basic-padding);
 }
-/*
 
-article {
-}
-
-div {
-}
-aside {
-} */
 footer {
   font-size: 0.8rem;
   font-weight: normal;
@@ -108,9 +40,6 @@ h3 {
   font-family: "Open Sans", sans-serif;
 }
 button {
-  /* background-color: var(--section-background-color);
-  border: 1px solid var(--border-color);
-  color: var(--link-color); */
   font-size: 1rem;
   display: block;
   margin: var(--basic-margin);
@@ -118,28 +47,12 @@ button {
 
   width: 45vw;
 }
-/* button:focus {
-  /* outline: 1px solid var(--highlight-text-color);
+button:focus {
+   outline: 1px solid var(--highlight-text-color);
 }
 button:hover {
-  /* color: var(--highlight-text-color); 
-} */
-/* input {
-  color: var(--text-color);
-  font-family: "Kanit", Arial, sans-serif;
-  font-size: 1rem;
-  margin-left: 1rem;
-  padding: var(--generous-padding);
+   color: var(--highlight-text-color); 
 }
-input:focus {
-  outline: 1px solid var(--highlight-text-color);
-}
-input:invalid {
-  background-color: var(--section-background-color);
-}
-input::placeholder {
-  font-style: italic;
-} */
 
 .cards {
   list-style: none;
@@ -160,6 +73,7 @@ input::placeholder {
   vertical-align: middle;
   border-radius: calc(var(--basic-margin)/4);
 }
+
 /* Fade in/out the different screens */
 #screen1, #screen2, #screen3 {
   transition: opacity 0.4s ease-in-out, visibility 0.2s ease-in-out;
