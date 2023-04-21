@@ -1,6 +1,8 @@
 "use strict";
 const key = "NNu9H9hYedeITLk_PuCxWDs5R7B41fXawA-pURd-yYE";
 
+let place = '';
+let page = 2;
 // Detect user's location on window load
 // Adapted from:
 // URL: https://medium.com/@mignunez/how-to-access-a-users-location-with-the-geolocation-api-javascript-91376b7fc720
@@ -36,7 +38,7 @@ const getApi = (geoApi) => {
       if (data) {
         addPlace(data);
       } else {
-        showError("Could not use the data.", '#gallery');
+        showError("Could not use the data.", "#gallery");
       }
     })
     .catch((error) => {
@@ -54,6 +56,7 @@ const addPlace = (data) => {
         place.classList.remove("loader");
       });
     }
+    place = data?.locality;
   }
 };
 
@@ -69,7 +72,7 @@ Adapted by Melanie Archer
 */
 
 async function getPhotos(place, page) {
-  const UNSPLASH = `https://api.unsplash.com/photos?client_id=${key}&order_by=latest&per_page=6&page=${page}`;
+  const UNSPLASH = `https://api.unsplash.com/photos?query=${place}&client_id=${key}&order_by=latest&per_page=6&page=${page}`;
 
   // Allow fetch to be canceled
   const controller = new AbortController();
@@ -87,14 +90,13 @@ async function getPhotos(place, page) {
     showNextScreen("#screen2", "#screen1");
   });
 
-  // TODO you must take the photo id of each photo and then get its location in a separate call
   fetch(UNSPLASH, {
     signal: signal,
   })
     .then((resp) => resp.json())
     .then((json) => {
       if (json.error) {
-        showError(json.error, '#thinker');
+        showError(json.error, "#thinker");
       } else {
         usePhotos(json);
       }
@@ -114,23 +116,23 @@ const usePhotos = (data) => {
   emptyPhotoGallery();
 
   for (let i = 0; i < data.length; i++) {
-    const li = document.createElement("li");
-    const a = document.createElement("a");
-    const img = document.createElement("img");
-    const p = document.createElement("p");
-    li.className = "card";
-    a.setAttribute("href", data[i].links.html);
-    img.setAttribute("src", data[i].urls.thumb);
-    img.setAttribute("alt", data[i].alt_description);
-    p.innerText = data[i].user.name;
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      const img = document.createElement("img");
+      const p = document.createElement("p");
+      li.className = "card";
+      a.setAttribute("href", data[i].links.html);
+      img.setAttribute("src", data[i].urls.thumb);
+      img.setAttribute("alt", data[i].alt_description);
+      p.innerText = data[i].user.name;
 
-    a.appendChild(img);
-    li.appendChild(a);
-    li.append(p);
-    cards.appendChild(li);
+      a.appendChild(img);
+      li.appendChild(a);
+      li.append(p);
+      cards.appendChild(li);
 
-    // Show gallery screen
-    showNextScreen("#screen2", "#screen3");
+      // Show gallery screen
+      showNextScreen("#screen2", "#screen3");
   }
 };
 
@@ -145,7 +147,6 @@ const showNextScreen = (elm, nextScreen) => {
   trigger.className = "inactive";
 };
 
-
 // Event listeners
 document.addEventListener("DOMContentLoaded", (evt) => {
   let locale = findUserPlace();
@@ -155,21 +156,21 @@ document.addEventListener("DOMContentLoaded", (evt) => {
   fetchPhotos.addEventListener("click", (e) => {
     e.preventDefault();
     showNextScreen("#screen1", "#screen2");
-    getPhotos(locale.locality, 1);
+    getPhotos(place, 1);
   });
   const fetchMorePhotos = document.getElementById("fetchMorePhotos");
   fetchMorePhotos.addEventListener("click", (e) => {
     e.preventDefault();
     showNextScreen("#screen2", "#screen2");
-    getPhotos(locale.locality, 2);
+    getPhotos(place, page);
+    page++;
   });
 
-  const startOver = document.getElementById('startOver');
-  startOver.addEventListener('click', (e) => {
+  const startOver = document.getElementById("startOver");
+  startOver.addEventListener("click", (e) => {
     e.preventDefault();
     emptyPhotoGallery();
-    showNextScreen("#screen3", '#screen1');
+    page = 2;
+    showNextScreen("#screen3", "#screen1");
   });
-
-
 });
