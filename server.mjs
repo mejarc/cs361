@@ -14,7 +14,6 @@ app.use((error, req, res, next) => {
   res.status(500).send({ error: `500 - Server Error.` });
 });
 
-// Note: Don't add or change anything below this line.
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}...`);
 });
