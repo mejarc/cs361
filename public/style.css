@@ -53,7 +53,9 @@ button:focus {
 button:hover {
    color: var(--highlight-text-color); 
 }
-
+p {
+  margin: var(--basic-margin);
+}
 .cards {
   list-style: none;
   display: flex;
