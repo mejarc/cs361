@@ -53,6 +53,10 @@ button:focus {
 button:hover {
    color: var(--highlight-text-color); 
 }
+input {
+  margin-left: var(--basic-margin);
+}
+
 p {
   margin: var(--basic-margin);
 }

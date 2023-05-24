@@ -1,5 +1,10 @@
+import { placeChooser, choosePlace, placeInput, userInputPlace, zipCode } from "./accessors.js";
 
-  // Detect user's location in browser
+export let place = "";
+export let stateName = "";
+export let zip = "";
+
+// Detect user's location in browser
 // Adapted from:
 // URL: https://medium.com/@mignunez/how-to-access-a-users-location-with-the-geolocation-api-javascript-91376b7fc720
 // Date: November 2022
@@ -44,12 +49,17 @@ export const getApi = (geoApi) => {
 
 export const addPlace = (data) => {
   if (data) {
-    const locality = data?.locality;
+    let locality;
+    if (data.locality) {
+      locality = data?.locality
+     } else {
+      locality = data;
+     }
 
     // Detect USA
     if (data?.countryCode === "US") {
       stateName = data?.principalSubdivision;
-      document.getElementById("zip").classList.toggle("inactive");
+      zipCode.classList.toggle("inactive");
     }
     const places = document.querySelectorAll(".place");
     if (locality) {
@@ -57,7 +67,30 @@ export const addPlace = (data) => {
         place.innerText = locality;
         place.classList.remove("loader");
       });
+      place = data?.locality;
+    } else {
+      place = data;
     }
-    place = data?.locality;
   }
 };
+
+// Get user location or let user type it in
+choosePlace.addEventListener("click", (e) => {
+  if (choosePlace.checked) {
+    placeInput.classList.toggle("inactive");
+  }
+});
+
+
+placeChooser.addEventListener("submit", (e) => {
+  e.preventDefault();
+  let locale;
+  if (userInputPlace.value) {
+    locale = userInputPlace.value;
+    addPlace(locale);
+  } else {
+    locale = findUserPlace();
+  }
+  userInputPlace.value = "";
+  placeInput.className = "inactive";
+});
