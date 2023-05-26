@@ -1,14 +1,24 @@
 "use strict";
-import { getZipCode, showZipCode }  from "./zipcode.js";
-import { findUserPlace, getApi, addPlace } from "./places.js";
+// TODO: reduce to ~ 100 lines
+import { getZipCode, showZipCode } from "./zipcode.js";
+import {
+  fetchPhotos,
+  fetchMorePhotos,
+  startOver,
+  zipCode,
+  cancelSearch,
+} from "./accessors.js";
+import {
+  findUserPlace,
+  getApi,
+  addPlace,
+  stateName,
+  zip,
+  photoPlace
+} from "./places.js";
 
-const key = "REPLACE WITH YOUR API KEY";
-
-let place = "";
-let stateName = "";
-let zip = "";
+const key = "....";
 let page = 2;
-
 
 const showError = (error, elm) => {
   document.querySelector(elm).innerText = error;
@@ -21,8 +31,8 @@ Date: April 2023
 Adapted by Melanie Archer
 */
 // TODO find out why results are different from search in browser form
-const getPhotos = (place, page) => {
-  const UNSPLASH = `https://api.unsplash.com/search/photos?query=${place}&client_id=${key}&order_by=latest&per_page=6&page=${page}`;
+const getPhotos = (photoPlace, page) => {
+  const UNSPLASH = `https://api.unsplash.com/search/photos?query=${photoPlace}&client_id=${key}&order_by=latest&per_page=6&page=${page}`;
 
   // Allow fetch to be canceled
   const controller = new AbortController();
@@ -32,9 +42,8 @@ const getPhotos = (place, page) => {
   });
 
   // When the user cancels photo search, empty the gallery and return to first screen
-  const cancelSearch = document.getElementById("cancelSearch");
   cancelSearch.addEventListener("click", (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     controller.abort();
     emptyPhotoGallery();
     showNextScreen("#screen2", "#screen1");
@@ -97,63 +106,30 @@ const showNextScreen = (elm, nextScreen) => {
   trigger.className = "inactive";
 };
 
-
 // TODO: process user location input
 // https://nominatim.openstreetmap.org/search.php?city=taipei&format=jsonv2
 
 // Event listeners
-document.addEventListener("DOMContentLoaded", (evt) => {
-  let locale;
+fetchPhotos.addEventListener("click", (e) => {
+  showNextScreen("#screen1", "#screen2");
+  getPhotos(photoPlace, 1);
+});
 
-  // Get user location or let user type it in
-  const placeChooser = document.getElementById("placeChooser");
-  const choosePlace = document.getElementById("choosePlace");
-  const placeInput = document.getElementById("placeInput");
+fetchMorePhotos.addEventListener("click", (e) => {
+  e.preventDefault();
+  emptyPhotoGallery();
+  showNextScreen("#screen2", "#screen2");
+  getPhotos(photoPlace, page);
+  page++;
+});
 
-  choosePlace.addEventListener("click", (e) => {
-    if (choosePlace.checked) {
-      placeInput.classList.toggle("inactive");
-    }
-  });
+startOver.addEventListener("click", (e) => {
+  e.preventDefault();
+  emptyPhotoGallery();
+  page = 2;
+  showNextScreen("#screen3", "#screen1");
+});
 
-  const userInputPlace = document.getElementById("userInputPlace");
-  placeChooser.addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (userInputPlace.value) {
-      locale = userInputPlace.value;
-    } else {
-      locale = findUserPlace();
-    }
-    addPlace(locale);
-  });
-
- 
-
-  const fetchPhotos = document.getElementById("fetchPhotos");
-  fetchPhotos.addEventListener("click", (e) => {
-    e.preventDefault();
-    showNextScreen("#screen1", "#screen2");
-    getPhotos(place, 1);
-  });
-  const fetchMorePhotos = document.getElementById("fetchMorePhotos");
-  fetchMorePhotos.addEventListener("click", (e) => {
-    e.preventDefault();
-    emptyPhotoGallery();
-    showNextScreen("#screen2", "#screen2");
-    getPhotos(place, page);
-    page++;
-  });
-
-  const startOver = document.getElementById("startOver");
-  startOver.addEventListener("click", (e) => {
-    e.preventDefault();
-    emptyPhotoGallery();
-    page = 2;
-    showNextScreen("#screen3", "#screen1");
-  });
-
-  const zipCode = document.getElementById("zip");
-  zipCode.addEventListener("click", (e) => {
-    getZipCode(place, stateName);
-  });
+zipCode.addEventListener("click", (e) => {
+  getZipCode(photoPlace, stateName);
 });

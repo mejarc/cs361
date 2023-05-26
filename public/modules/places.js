@@ -1,6 +1,6 @@
 import { placeChooser, choosePlace, placeInput, userInputPlace, zipCode } from "./accessors.js";
 
-export let place = "";
+export let photoPlace;
 export let stateName = "";
 export let zip = "";
 
@@ -55,8 +55,10 @@ export const addPlace = (data) => {
      } else {
       locality = data;
      }
+     photoPlace = locality;
 
     // Detect USA
+    // TODO: debug. showing up for "France"
     if (data?.countryCode === "US") {
       stateName = data?.principalSubdivision;
       zipCode.classList.toggle("inactive");
@@ -67,9 +69,6 @@ export const addPlace = (data) => {
         place.innerText = locality;
         place.classList.remove("loader");
       });
-      place = data?.locality;
-    } else {
-      place = data;
     }
   }
 };
@@ -84,12 +83,11 @@ choosePlace.addEventListener("click", (e) => {
 
 placeChooser.addEventListener("submit", (e) => {
   e.preventDefault();
-  let locale;
   if (userInputPlace.value) {
-    locale = userInputPlace.value;
-    addPlace(locale);
+    photoPlace = userInputPlace.value;
+    addPlace(photoPlace);
   } else {
-    locale = findUserPlace();
+    photoPlace = findUserPlace();
   }
   userInputPlace.value = "";
   placeInput.className = "inactive";
