@@ -1,4 +1,10 @@
-import { placeChooser, choosePlace, placeInput, userInputPlace, zipCode } from "./accessors.js";
+import {
+  placeChooser,
+  choosePlace,
+  placeInput,
+  userInputPlace,
+  zipCode,
+} from "./exports.js";
 
 export let photoPlace;
 export let stateName = "";
@@ -51,11 +57,11 @@ export const addPlace = (data) => {
   if (data) {
     let locality;
     if (data.locality) {
-      locality = data?.locality
-     } else {
+      locality = data?.locality;
+    } else {
       locality = data;
-     }
-     photoPlace = locality;
+    }
+    photoPlace = locality;
 
     // Detect USA
     // TODO: debug. showing up for "France"
@@ -79,7 +85,6 @@ choosePlace.addEventListener("click", (e) => {
     placeInput.classList.toggle("inactive");
   }
 });
-
 
 placeChooser.addEventListener("submit", (e) => {
   e.preventDefault();

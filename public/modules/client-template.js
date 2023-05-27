@@ -1,23 +1,22 @@
 "use strict";
-// TODO: reduce to ~ 100 lines
-import { getZipCode, showZipCode } from "./zipcode.js";
 import {
+  getZipCode,
+  showZipCode,
   fetchPhotos,
   fetchMorePhotos,
   startOver,
   zipCode,
   cancelSearch,
-} from "./accessors.js";
-import {
+  gallery,
   findUserPlace,
   getApi,
   addPlace,
   stateName,
   zip,
-  photoPlace
-} from "./places.js";
+  photoPlace,
+} from "./exports.js";
 
-const key = "....";
+const key = "...";
 let page = 2;
 
 const showError = (error, elm) => {
@@ -30,7 +29,6 @@ Authors: @unsplash
 Date: April 2023
 Adapted by Melanie Archer
 */
-// TODO find out why results are different from search in browser form
 const getPhotos = (photoPlace, page) => {
   const UNSPLASH = `https://api.unsplash.com/search/photos?query=${photoPlace}&client_id=${key}&order_by=latest&per_page=6&page=${page}`;
 
@@ -43,9 +41,8 @@ const getPhotos = (photoPlace, page) => {
 
   // When the user cancels photo search, empty the gallery and return to first screen
   cancelSearch.addEventListener("click", (e) => {
-    // e.preventDefault();
     controller.abort();
-    emptyPhotoGallery();
+    emptyPhotoGallery(gallery);
     showNextScreen("#screen2", "#screen1");
   });
 
@@ -63,16 +60,14 @@ const getPhotos = (photoPlace, page) => {
 };
 
 // Remove any images already placed
-const emptyPhotoGallery = () => {
-  const gallery = document.querySelector("#gallery .cards");
+const emptyPhotoGallery = (gallery) => {
   while (gallery.lastChild) {
     gallery.removeChild(gallery.lastChild);
   }
 };
 
 const usePhotos = (data) => {
-  const cards = document.querySelector("#gallery .cards");
-  emptyPhotoGallery();
+  emptyPhotoGallery(gallery);
 
   for (let i = 0; i < data.length; i++) {
     const li = document.createElement("li");
@@ -88,7 +83,7 @@ const usePhotos = (data) => {
     a.appendChild(img);
     li.appendChild(a);
     li.append(p);
-    cards.appendChild(li);
+    gallery.appendChild(li);
 
     // Show gallery screen
     showNextScreen("#screen2", "#screen3");
@@ -116,16 +111,14 @@ fetchPhotos.addEventListener("click", (e) => {
 });
 
 fetchMorePhotos.addEventListener("click", (e) => {
-  e.preventDefault();
-  emptyPhotoGallery();
+  emptyPhotoGallery(gallery);
   showNextScreen("#screen2", "#screen2");
   getPhotos(photoPlace, page);
   page++;
 });
 
 startOver.addEventListener("click", (e) => {
-  e.preventDefault();
-  emptyPhotoGallery();
+  emptyPhotoGallery(gallery);
   page = 2;
   showNextScreen("#screen3", "#screen1");
 });
