@@ -1,4 +1,4 @@
-  // If user is in USA, offer way to retrieve ZIP code
+// If user is in USA, offer way to retrieve ZIP code
 export const getZipCode = (city, state) => {
   // Call microservice for ZIP code
   const URL = "http://localhost:4500/zipcode";
@@ -8,7 +8,6 @@ export const getZipCode = (city, state) => {
       return result.json();
     })
     .then((json) => {
-      console.log(`ZIP: ${json.postcode}`);
       showZipCode(json.postcode);
     });
 };

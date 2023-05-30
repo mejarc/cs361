@@ -9,6 +9,8 @@ import {
 export let photoPlace;
 export let stateName = "";
 export let zip = "";
+export let latitude = "";
+export let longitude = "";
 
 // Detect user's location in browser
 // Adapted from:
@@ -24,6 +26,8 @@ export const findUserPlace = async () => {
 
         // Pass off result to conversion
         getApi(geoApi);
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
       },
       (error) => {
         console.error(error.message);
@@ -64,7 +68,7 @@ export const addPlace = (data) => {
     photoPlace = locality;
 
     // Detect USA
-    // TODO: debug. showing up for "France"
+    // TODO: debug. showing up for "France". Data is always defined
     if (data?.countryCode === "US") {
       stateName = data?.principalSubdivision;
       zipCode.classList.toggle("inactive");
@@ -91,6 +95,19 @@ placeChooser.addEventListener("submit", (e) => {
   if (userInputPlace.value) {
     photoPlace = userInputPlace.value;
     addPlace(photoPlace);
+
+    
+    // Get lat/longitude of user-entered place
+    let placeAPI = `https://nominatim.openstreetmap.org/search.php?city=${photoPlace}&format=jsonv2`;
+    fetch(placeAPI)
+    .then((resp) => {
+      return resp.json();
+    })
+    .then((data) => {
+      latitude = data[0].lat;
+      longitude = data[0].lon;
+      // TODO: use geoApi to get postcode
+    });
   } else {
     photoPlace = findUserPlace();
   }

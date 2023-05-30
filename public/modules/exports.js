@@ -19,6 +19,8 @@ import {
   stateName,
   zip,
   photoPlace,
+  latitude,
+  longitude
 } from "./places.js";
 
 export {
