@@ -10,11 +10,9 @@ import {
   zipChooser,
 } from "./accessors.js";
 
-export let photoPlace;
+export let photoPlace = "";
 export let stateName = "";
-export let zip = "";
-export let latitude = "";
-export let longitude = "";
+export let userZipInput = "";
 
 // Detect user's location in browser
 // Adapted from:
@@ -30,8 +28,6 @@ export const findUserPlace = async () => {
 
         // Pass off result to conversion
         getApi(geoApi);
-        latitude = position.coords.latitude;
-        longitude = position.coords.longitude;
       },
       (error) => {
         console.error(error.message);
@@ -51,7 +47,7 @@ export const getApi = (geoApi) => {
     })
     .then((data) => {
       if (data) {
-        addPlace(data);
+        addPlaceToUi(data);
       } else {
         showError("Could not use the data.", "#gallery");
       }
@@ -61,19 +57,20 @@ export const getApi = (geoApi) => {
     });
 };
 
-export const addPlace = (data) => {
-  if (data) {
+export const addPlaceToUi = (placeInput) => {
+  if (placeInput) {
     let locality;
-    if (data.locality) {
-      locality = data?.locality;
+    // If we're using the browser location, find the city name
+    if (placeInput.locality) {
+      locality = placeInput?.locality;
     } else {
-      locality = data;
+      locality = placeInput;
     }
     photoPlace = locality;
 
     // Detect USA
-    if (data?.countryCode === "US") {
-      stateName = data?.principalSubdivision;
+    if (placeInput?.countryCode === "US") {
+      stateName = placeInput?.principalSubdivision;
     }
     const places = document.querySelectorAll(".place");
     if (locality) {
@@ -96,8 +93,9 @@ placeChooser.addEventListener("submit", (e) => {
   e.preventDefault();
   // Text input for user to enter place
   if (userInputPlace.value) {
+    photoPlace = userInputPlace.value;
     // If this is a ZIP code, find the city
-    const ZIP_API = `https://app.zipcodebase.com/api/v1/search?apikey=${zipKey}&codes=${userInputPlace.value}`;
+    const ZIP_API = `https://app.zipcodebase.com/api/v1/search?apikey=${zipKey}&codes=${photoPlace}`;
 
     fetch(ZIP_API)
       .then((resp) => resp.json())
@@ -106,10 +104,9 @@ placeChooser.addEventListener("submit", (e) => {
           showError(json.error, "#thinker");
         } else {
           const locator = Object.entries(json.results)[0][1][0].city;
-          console.log(locator);
-          photoPlace = locator;
           // Add this place to UI display
-          addPlace(photoPlace);
+          let str = `${photoPlace} and/or ${locator}`;
+          addPlaceToUi(str);
         }
       });
   } else {
@@ -117,7 +114,7 @@ placeChooser.addEventListener("submit", (e) => {
     zipChooser.classList.toggle("inactive");
     photoPlace = findUserPlace();
     // Add this place to UI display
-    addPlace(photoPlace);
+    addPlaceToUi(photoPlace);
   }
   userInputPlace.value = "";
   placeInput.className = "inactive";

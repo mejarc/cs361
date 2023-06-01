@@ -14,9 +14,9 @@ import {
   gallery,
   findUserPlace,
   getApi,
-  addPlace,
+  addPlaceToUi,
   stateName,
-  zip,
+  userZipInput,
   photoPlace,
 } from "./exports.js";
 
@@ -33,7 +33,7 @@ Date: April 2023
 Adapted by Melanie Archer
 */
 const getPhotos = (photoPlace, page) => {
-  const UNSPLASH = `https://api.unsplash.com/search/photos?query=${photoPlace}&client_id=${unsplashKey}&order_by=latest&per_page=6&page=${page}`;
+  const UNSPLASH = `https://api.unsplash.com/search/photos?query=${photoPlace},${userZipInput}&client_id=${unsplashKey}&order_by=latest&per_page=6&page=${page}`;
 
   // Allow fetch to be canceled
   const controller = new AbortController();

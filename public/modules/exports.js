@@ -16,12 +16,10 @@ import {
 import {
   findUserPlace,
   getApi,
-  addPlace,
+  addPlaceToUi,
   stateName,
-  zip,
-  photoPlace,
-  latitude,
-  longitude,
+  userZipInput,
+  photoPlace
 } from "./places.js";
 
 export {
@@ -39,9 +37,9 @@ export {
   zipCode,
   findUserPlace,
   getApi,
-  addPlace,
+  addPlaceToUi,
   stateName,
-  zip,
+  userZipInput,
   photoPlace,
   zipChooser,
 };
