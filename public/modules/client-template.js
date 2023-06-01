@@ -1,5 +1,9 @@
 "use strict";
 import {
+  unsplashKey,
+} from "./keys.js";
+
+import {
   getZipCode,
   showZipCode,
   fetchPhotos,
@@ -16,7 +20,6 @@ import {
   photoPlace,
 } from "./exports.js";
 
-const key = "...";
 let page = 2;
 
 const showError = (error, elm) => {
@@ -30,7 +33,7 @@ Date: April 2023
 Adapted by Melanie Archer
 */
 const getPhotos = (photoPlace, page) => {
-  const UNSPLASH = `https://api.unsplash.com/search/photos?query=${photoPlace}&client_id=${key}&order_by=latest&per_page=6&page=${page}`;
+  const UNSPLASH = `https://api.unsplash.com/search/photos?query=${photoPlace}&client_id=${unsplashKey}&order_by=latest&per_page=6&page=${page}`;
 
   // Allow fetch to be canceled
   const controller = new AbortController();
@@ -101,8 +104,7 @@ const showNextScreen = (elm, nextScreen) => {
   trigger.className = "inactive";
 };
 
-// TODO: process user location input
-// https://nominatim.openstreetmap.org/search.php?city=taipei&format=jsonv2
+
 
 // Event listeners
 fetchPhotos.addEventListener("click", (e) => {

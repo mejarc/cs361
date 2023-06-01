@@ -10,6 +10,7 @@ import {
   placeInput,
   userInputPlace,
   zipCode,
+  zipChooser
 } from "./accessors.js";
 
 import {
@@ -20,7 +21,7 @@ import {
   zip,
   photoPlace,
   latitude,
-  longitude
+  longitude,
 } from "./places.js";
 
 export {
@@ -42,4 +43,5 @@ export {
   stateName,
   zip,
   photoPlace,
+  zipChooser,
 };

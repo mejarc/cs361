@@ -13,16 +13,16 @@
     <main>
         <article>
 
-
             <section id="screen1" class="active">
                 <form id="placeChooser">
                     <fieldset>
                         <legend>Choose a place</legend>
                         <label><input checked type="radio" name="place" value="here">Use your current location</label>
+                        <div class="inactive" id="zipChooser"><button id="zip" type="button">Get your ZIP code</button>
+                        </div>
                         <label><input type="radio" id="choosePlace" name="place" value="choosePlace">Use a location you
-                            enter</label>
-                        <div class="inactive" id="placeInput"><label>Enter the name of a
-                                place<input type="text" id="userInputPlace"></label></div>
+                            enter (place name or postal code)</label>
+                        <div class="inactive" id="placeInput"><label>Enter place:<input type="text" id="userInputPlace"></label></div>
                         <button type="submit">Submit</button>
                     </fieldset>
                 </form>
@@ -50,9 +50,6 @@
                 <div class="actions">
                     <button id="fetchMorePhotos" type="button">See more photos</button>
                     <button id="startOver" type="button">Start over</button>
-                    <div><button class="inactive" id="zip" type="button">Get your ZIP code</button></div>
-
-
                 </div>
             </section>
         </article>
@@ -61,7 +58,7 @@
     <script type="module" src="./modules/zipcode.js"></script>
     <!-- <script type="module" src="./modules/accessors.js"></script>
     <script type="module" src="./modules/places.js" defer></script> -->
-    <script type="module" src="./modules/client.js"  defer></script>
+    <script type="module" src="./modules/client.js" defer></script>
 </body>
 
 </html>

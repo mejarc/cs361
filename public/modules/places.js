@@ -1,10 +1,14 @@
+"use strict";
+import { zipKey } from "./keys.js";
+
 import {
   placeChooser,
   choosePlace,
   placeInput,
   userInputPlace,
   zipCode,
-} from "./exports.js";
+  zipChooser,
+} from "./accessors.js";
 
 export let photoPlace;
 export let stateName = "";
@@ -68,10 +72,8 @@ export const addPlace = (data) => {
     photoPlace = locality;
 
     // Detect USA
-    // TODO: debug. showing up for "France". Data is always defined
     if (data?.countryCode === "US") {
       stateName = data?.principalSubdivision;
-      zipCode.classList.toggle("inactive");
     }
     const places = document.querySelectorAll(".place");
     if (locality) {
@@ -92,24 +94,30 @@ choosePlace.addEventListener("click", (e) => {
 
 placeChooser.addEventListener("submit", (e) => {
   e.preventDefault();
+  // Text input for user to enter place
   if (userInputPlace.value) {
-    photoPlace = userInputPlace.value;
-    addPlace(photoPlace);
+    // If this is a ZIP code, find the city
+    const ZIP_API = `https://app.zipcodebase.com/api/v1/search?apikey=${zipKey}&codes=${userInputPlace.value}`;
 
-    
-    // Get lat/longitude of user-entered place
-    let placeAPI = `https://nominatim.openstreetmap.org/search.php?city=${photoPlace}&format=jsonv2`;
-    fetch(placeAPI)
-    .then((resp) => {
-      return resp.json();
-    })
-    .then((data) => {
-      latitude = data[0].lat;
-      longitude = data[0].lon;
-      // TODO: use geoApi to get postcode
-    });
+    fetch(ZIP_API)
+      .then((resp) => resp.json())
+      .then((json) => {
+        if (json.error) {
+          showError(json.error, "#thinker");
+        } else {
+          const locator = Object.entries(json.results)[0][1][0].city;
+          console.log(locator);
+          photoPlace = locator;
+          // Add this place to UI display
+          addPlace(photoPlace);
+        }
+      });
   } else {
+    // User chose browser-detected location
+    zipChooser.classList.toggle("inactive");
     photoPlace = findUserPlace();
+    // Add this place to UI display
+    addPlace(photoPlace);
   }
   userInputPlace.value = "";
   placeInput.className = "inactive";

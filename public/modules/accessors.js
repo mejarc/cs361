@@ -3,6 +3,7 @@ export const placeChooser = document.getElementById("placeChooser");
 export const choosePlace = document.getElementById("choosePlace");
 export const placeInput = document.getElementById("placeInput");
 export const userInputPlace = document.getElementById("userInputPlace");
+export const zipChooser = document.getElementById("zipChooser");
 
 // used in client
 export const fetchPhotos = document.getElementById("fetchPhotos");
