@@ -18,6 +18,7 @@ import {
   stateName,
   userZipInput,
   photoPlace,
+  postalCode,
 } from "./exports.js";
 
 let page = 2;
@@ -33,7 +34,8 @@ Date: April 2023
 Adapted by Melanie Archer
 */
 const getPhotos = (photoPlace, page) => {
-  const UNSPLASH = `https://api.unsplash.com/search/photos?query=${photoPlace},${userZipInput}&client_id=${unsplashKey}&order_by=latest&per_page=6&page=${page}`;
+  
+  const UNSPLASH = `https://api.unsplash.com/search/photos?query=${photoPlace},${postalCode}&client_id=${unsplashKey}&order_by=latest&per_page=6&page=${page}`;
 
   // Allow fetch to be canceled
   const controller = new AbortController();

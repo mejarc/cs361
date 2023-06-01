@@ -10,6 +10,7 @@ import {
   zipChooser,
 } from "./accessors.js";
 
+export let postalCode = "";
 export let photoPlace = "";
 export let stateName = "";
 export let userZipInput = "";
@@ -58,27 +59,25 @@ export const getApi = (geoApi) => {
 };
 
 export const addPlaceToUi = (placeInput) => {
-  if (placeInput) {
-    let locality;
-    // If we're using the browser location, find the city name
-    if (placeInput.locality) {
-      locality = placeInput?.locality;
-    } else {
-      locality = placeInput;
-    }
-    photoPlace = locality;
+  let locality;
+  // If we're using the browser location, find the city name
+  if (placeInput.locality) {
+    locality = placeInput?.locality;
+  } else {
+    locality = placeInput;
+  }
+  photoPlace = locality;
 
-    // Detect USA
-    if (placeInput?.countryCode === "US") {
-      stateName = placeInput?.principalSubdivision;
-    }
-    const places = document.querySelectorAll(".place");
-    if (locality) {
-      places.forEach((place) => {
-        place.innerText = locality;
-        place.classList.remove("loader");
-      });
-    }
+  // Detect USA
+  if (placeInput?.countryCode === "US") {
+    stateName = placeInput?.principalSubdivision;
+  }
+  const places = document.querySelectorAll(".place");
+  if (locality) {
+    places.forEach((place) => {
+      place.innerText = locality;
+      place.classList.remove("loader");
+    });
   }
 };
 
@@ -93,9 +92,10 @@ placeChooser.addEventListener("submit", (e) => {
   e.preventDefault();
   // Text input for user to enter place
   if (userInputPlace.value) {
-    photoPlace = userInputPlace.value;
-    // If this is a ZIP code, find the city
-    const ZIP_API = `https://app.zipcodebase.com/api/v1/search?apikey=${zipKey}&codes=${photoPlace}`;
+    photoPlace = postalCode = userInputPlace.value;
+
+    // If this is a postal code, find the city
+    const ZIP_API = `https://app.zipcodebase.com/api/v1/search?apikey=${zipKey}&codes=${postalCode}`;
 
     fetch(ZIP_API)
       .then((resp) => resp.json())
@@ -103,19 +103,19 @@ placeChooser.addEventListener("submit", (e) => {
         if (json.error) {
           showError(json.error, "#thinker");
         } else {
-          const locator = Object.entries(json.results)[0][1][0].city;
-          // Add this place to UI display
-          let str = `${photoPlace} and/or ${locator}`;
-          addPlaceToUi(str);
+          if (Object.entries(json.results)[0]) {
+            photoPlace = Object.entries(json.results)[0][1][0].city;
+          }
         }
       });
   } else {
     // User chose browser-detected location
     zipChooser.classList.toggle("inactive");
     photoPlace = findUserPlace();
-    // Add this place to UI display
-    addPlaceToUi(photoPlace);
   }
+
+  // Add this place to UI display
+  addPlaceToUi(photoPlace);
   userInputPlace.value = "";
   placeInput.className = "inactive";
 });

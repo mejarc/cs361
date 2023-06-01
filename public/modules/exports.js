@@ -19,7 +19,8 @@ import {
   addPlaceToUi,
   stateName,
   userZipInput,
-  photoPlace
+  photoPlace,
+  postalCode
 } from "./places.js";
 
 export {
@@ -42,4 +43,5 @@ export {
   userZipInput,
   photoPlace,
   zipChooser,
+  postalCode
 };
