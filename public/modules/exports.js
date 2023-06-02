@@ -23,6 +23,10 @@ import {
   postalCode
 } from "./places.js";
 
+export const showError = (error, elm) => {
+  document.querySelector(elm).innerText = error;
+};
+
 export {
   getZipCode,
   showZipCode,

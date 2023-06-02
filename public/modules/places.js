@@ -1,6 +1,6 @@
 "use strict";
 import { zipKey } from "./keys.js";
-
+import { showError } from "./exports.js";
 import {
   placeChooser,
   choosePlace,
@@ -8,6 +8,7 @@ import {
   userInputPlace,
   zipCode,
   zipChooser,
+  places
 } from "./accessors.js";
 
 export let postalCode = "";
@@ -60,6 +61,7 @@ export const getApi = (geoApi) => {
 
 export const addPlaceToUi = (placeInput) => {
   let locality;
+
   // If we're using the browser location, find the city name
   if (placeInput.locality) {
     locality = placeInput?.locality;
@@ -67,12 +69,7 @@ export const addPlaceToUi = (placeInput) => {
     locality = placeInput;
   }
   photoPlace = locality;
-
-  // Detect USA
-  if (placeInput?.countryCode === "US") {
-    stateName = placeInput?.principalSubdivision;
-  }
-  const places = document.querySelectorAll(".place");
+  
   if (locality) {
     places.forEach((place) => {
       place.innerText = locality;

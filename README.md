@@ -11,15 +11,15 @@
 $ cd look-around
 $ npm i
 ```
-You will have to supply [your own API key for Unsplash](https://unsplash.com/oauth/applications). 
+You will have to supply your own API keys for [Unsplash](https://unsplash.com/oauth/applications) and for [ZIPcodebase](https://zipcodebase.com/).
 
-Once you have that, copy `public/client-template.js`, and 
-replace `TODO: Replace with your own API key` with the key. 
+Once you have that, copy `public/modules/keys-template.js`, and 
+replace `TODO: Replace with your own API key` with the keys. 
 
-Rename the file to `public/client.js`.
+Rename the file to `public/modules/keys.js`.
 
 ```console
-$ cp public/client-template.js public/client.js
+$ cp public/modules/keys-template.js public/modules/keys.js
 ```
 To start the application [locally](http://localhost:3467), type this command from the project directory:
 
