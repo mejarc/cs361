@@ -19,13 +19,10 @@ import {
   userZipInput,
   photoPlace,
   postalCode,
+  showError
 } from "./exports.js";
 
 let page = 2;
-
-const showError = (error, elm) => {
-  document.querySelector(elm).innerText = error;
-};
 
 /* Adapted from Unsplash API documentation
 URL: https://unsplash.com/documentation
@@ -34,7 +31,6 @@ Date: April 2023
 Adapted by Melanie Archer
 */
 const getPhotos = (photoPlace, page) => {
-  
   const UNSPLASH = `https://api.unsplash.com/search/photos?query=${photoPlace},${postalCode}&client_id=${unsplashKey}&order_by=latest&per_page=6&page=${page}`;
 
   // Allow fetch to be canceled
@@ -99,14 +95,10 @@ const showNextScreen = (elm, nextScreen) => {
   const trigger = document.querySelector(elm);
   const next = document.querySelector(nextScreen);
   trigger.classList.toggle("active");
-
   next.classList.toggle("inactive");
   next.className = "active";
-
   trigger.className = "inactive";
 };
-
-
 
 // Event listeners
 fetchPhotos.addEventListener("click", (e) => {
