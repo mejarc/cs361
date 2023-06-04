@@ -23,12 +23,10 @@ export let userZipInput = "";
 // Author: Miguel Nunez
 export const findUserPlace = async () => {
   if (navigator.geolocation) {
-    // Find current location, send to Big Data Cloud to convert to human-readable form
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const geoApi = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&latitude=${position.coords.longitude}`;
 
-        // Pass off result to conversion
         getApi(geoApi);
       },
       (error) => {
@@ -87,12 +85,10 @@ choosePlace.addEventListener("click", (e) => {
 
 placeChooser.addEventListener("submit", (e) => {
   e.preventDefault();
-  // Text input for user to enter place
   if (userInputPlace.value) {
     photoPlace = userInputPlace.value;
     postalCode = userInputPlace.value;
 
-    // If this is a postal code, find the city
     const ZIP_API = `https://app.zipcodebase.com/api/v1/search?apikey=${zipKey}&codes=${postalCode}`;
 
     fetch(ZIP_API)
@@ -108,7 +104,6 @@ placeChooser.addEventListener("submit", (e) => {
         }
       });
   } else {
-    // User chose browser-detected location
     zipChooser.classList.toggle("inactive");
     photoPlace = findUserPlace();
     addPlaceToUi(photoPlace);

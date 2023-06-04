@@ -1,7 +1,5 @@
 "use strict";
-import {
-  unsplashKey,
-} from "./keys.js";
+import { unsplashKey } from "./keys.js";
 
 import {
   getZipCode,
@@ -19,10 +17,26 @@ import {
   userZipInput,
   photoPlace,
   postalCode,
-  showError
+  showError,
 } from "./exports.js";
 
 let page = 2;
+
+const createPhotoCard = (href, src, alt, name) => {
+  const li = document.createElement("li");
+  const a = document.createElement("a");
+  const img = document.createElement("img");
+  const p = document.createElement("p");
+  li.className = "card";
+  a.setAttribute("href", href);
+  img.setAttribute("src", src);
+  img.setAttribute("alt", alt);
+  p.innerText = name;
+  a.appendChild(img);
+  li.appendChild(a);
+  li.append(p);
+  return li;
+};
 
 /* Adapted from Unsplash API documentation
 URL: https://unsplash.com/documentation
@@ -32,15 +46,12 @@ Adapted by Melanie Archer
 */
 const getPhotos = (photoPlace, page) => {
   const UNSPLASH = `https://api.unsplash.com/search/photos?query=${photoPlace},${postalCode}&client_id=${unsplashKey}&order_by=latest&per_page=6&page=${page}`;
-
-  // Allow fetch to be canceled
   const controller = new AbortController();
   const signal = controller.signal;
   signal.addEventListener("abort", () => {
     console.log("Fetch canceled.");
   });
 
-  // When the user cancels photo search, empty the gallery and return to first screen
   cancelSearch.addEventListener("click", (e) => {
     controller.abort();
     emptyPhotoGallery(gallery);
@@ -55,12 +66,13 @@ const getPhotos = (photoPlace, page) => {
       if (json.error) {
         showError(json.error, "#thinker");
       } else {
+        emptyPhotoGallery(gallery);
         usePhotos(json.results);
+        showNextScreen("#screen2", "#screen3");
       }
     });
 };
 
-// Remove any images already placed
 const emptyPhotoGallery = (gallery) => {
   while (gallery.lastChild) {
     gallery.removeChild(gallery.lastChild);
@@ -68,26 +80,18 @@ const emptyPhotoGallery = (gallery) => {
 };
 
 const usePhotos = (data) => {
-  emptyPhotoGallery(gallery);
-
-  for (let i = 0; i < data.length; i++) {
-    const li = document.createElement("li");
-    const a = document.createElement("a");
-    const img = document.createElement("img");
-    const p = document.createElement("p");
-    li.className = "card";
-    a.setAttribute("href", data[i].links.html);
-    img.setAttribute("src", data[i].urls.thumb);
-    img.setAttribute("alt", data[i].alt_description);
-    p.innerText = data[i].user.name;
-
-    a.appendChild(img);
-    li.appendChild(a);
-    li.append(p);
-    gallery.appendChild(li);
-
-    // Show gallery screen
-    showNextScreen("#screen2", "#screen3");
+  if (Array.isArray(data) && data.length > 0) {
+    for (let i = 0; i < data.length; i++) {
+      let card = createPhotoCard(
+        data[i].links.html,
+        data[i].urls.thumb,
+        data[i].alt_description,
+        data[i].user.name
+      );
+      gallery.appendChild(card);
+    }
+  } else {
+    showError("No photos found.", "#gallery");
   }
 };
 
@@ -100,7 +104,6 @@ const showNextScreen = (elm, nextScreen) => {
   trigger.className = "inactive";
 };
 
-// Event listeners
 fetchPhotos.addEventListener("click", (e) => {
   showNextScreen("#screen1", "#screen2");
   getPhotos(photoPlace, 1);
