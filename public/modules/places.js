@@ -89,7 +89,8 @@ placeChooser.addEventListener("submit", (e) => {
   e.preventDefault();
   // Text input for user to enter place
   if (userInputPlace.value) {
-    photoPlace = postalCode = userInputPlace.value;
+    photoPlace = userInputPlace.value;
+    postalCode = userInputPlace.value;
 
     // If this is a postal code, find the city
     const ZIP_API = `https://app.zipcodebase.com/api/v1/search?apikey=${zipKey}&codes=${postalCode}`;
@@ -103,16 +104,15 @@ placeChooser.addEventListener("submit", (e) => {
           if (Object.entries(json.results)[0]) {
             photoPlace = Object.entries(json.results)[0][1][0].city;
           }
+          addPlaceToUi(photoPlace);
         }
       });
   } else {
     // User chose browser-detected location
     zipChooser.classList.toggle("inactive");
     photoPlace = findUserPlace();
+    addPlaceToUi(photoPlace);
   }
-
-  // Add this place to UI display
-  addPlaceToUi(photoPlace);
   userInputPlace.value = "";
   placeInput.className = "inactive";
 });
