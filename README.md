@@ -1,7 +1,8 @@
 # Look Around You: photos from nearby
 
-* Let the browser tell you where it thinks you are
-* With one click of a button, fetch six, or more, recent images taken near your location from the millions of photos available on [Unsplash](http://unsplash.com).
+* Let the browser tell you where it thinks you are, or
+* Type in a location or postal code, then
+* With one click of a button, fetch six (or more) images tagged with your location from the millions of photos available on [Unsplash](http://unsplash.com).
 
 ## Requirements
 * NodeJS
@@ -29,3 +30,4 @@ $ npm start
 
 
 ## Acknowledgements
+- [Steven Bertolucci](https://github.com/stevenbertolucci/zipcode-microservice), for the ZIP Code microservice
